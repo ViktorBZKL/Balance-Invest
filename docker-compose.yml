@@ -1,0 +1,14 @@
+services:
+    service-db:
+        image: postgres:15
+        container_name: vk_mini_app_db
+        environment:
+            POSTGRES_DB: vk_mini_app
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: admin
+        ports:
+            - "5437:5432"
+        volumes:
+            - db-data:/var/lib/postgresql/data
+volumes:
+    db-data:

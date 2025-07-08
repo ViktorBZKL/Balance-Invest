@@ -1,0 +1,7 @@
+.env
+
+.mypy_cache/
+venv/
+backend/src/__pycache__/
+
+frontend/node_modules/
