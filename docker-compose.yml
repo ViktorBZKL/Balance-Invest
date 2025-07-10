@@ -17,12 +17,12 @@ services:
     build:
       context: ./backend
     container_name: vk_mini_app_backend
-    ports:
-      - "8000:8000"
     environment:
       DATABASE: postgresql://postgres:admin@service-db:5432/vk_mini_app
     depends_on:
       - service-db
+    ports:
+      - "8000:8000"
     volumes:
       - ./backend:/app
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
