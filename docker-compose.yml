@@ -1,14 +1,31 @@
+version: "3.8"
+
 services:
-    service-db:
-        image: postgres:15
-        container_name: vk_mini_app_db
-        environment:
-            POSTGRES_DB: vk_mini_app
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: admin
-        ports:
-            - "5437:5432"
-        volumes:
-            - db-data:/var/lib/postgresql/data
+  service-db:
+    image: postgres:15
+    container_name: vk_mini_app_db
+    environment:
+      POSTGRES_DB: vk_mini_app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5437:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: vk_mini_app_backend
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE: postgresql://postgres:admin@service-db:5432/vk_mini_app
+    depends_on:
+      - service-db
+    volumes:
+      - ./backend:/app
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
 volumes:
-    db-data:
+  db-data:
