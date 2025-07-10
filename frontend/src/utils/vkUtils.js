@@ -1,4 +1,4 @@
-import axios from 'axios';
+import API from '../services/api';
 
 /**
  * Извлекает VK параметры из URL
@@ -30,15 +30,12 @@ export const sendVKParamsToBackend = async () => {
       return null;
     }
 
-    // Формируем query string для отправки на бэкенд
-    const queryString = new URLSearchParams(vkParams).toString();
-
     console.log('Отправляем VK параметры на бэкенд:', vkParams);
 
-    const response = await axios.get(`http://127.0.0.1:8000/vk/user?${queryString}`);
+    const response = await API.validateVKParams(vkParams);
 
-    console.log('Ответ от бэкенда:', response.data);
-    return response.data;
+    console.log('Ответ от бэкенда:', response);
+    return response;
 
   } catch (error) {
     console.error('Ошибка при отправке VK параметров:', error);
@@ -84,10 +81,10 @@ export const saveUserPortfolio = async (vkUserId, investmentAmount, selectedStoc
 
     console.log('Сохраняем портфель:', portfolioData);
 
-    const response = await axios.post('http://127.0.0.1:8000/portfolio/save', portfolioData);
+    const response = await API.savePortfolio(portfolioData);
 
-    console.log('Портфель сохранен:', response.data);
-    return response.data;
+    console.log('Портфель сохранен:', response);
+    return response;
 
   } catch (error) {
     console.error('Ошибка при сохранении портфеля:', error);
@@ -102,16 +99,17 @@ export const loadUserPortfolio = async (vkUserId) => {
   try {
     console.log('Загружаем портфель для пользователя:', vkUserId);
 
-    const response = await axios.get(`http://127.0.0.1:8000/portfolio/${vkUserId}`);
+    const response = await API.getPortfolio(vkUserId);
 
-    console.log('Портфель загружен:', response.data);
-    return response.data;
-
-  } catch (error) {
-    if (error.response && error.response.status === 404) {
+    if (response) {
+      console.log('Портфель загружен:', response);
+      return response;
+    } else {
       console.log('Портфель пользователя не найден');
       return null;
     }
+
+  } catch (error) {
     console.error('Ошибка при загрузке портфеля:', error);
     throw error;
   }

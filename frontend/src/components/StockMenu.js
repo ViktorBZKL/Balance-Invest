@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Panel,
   PanelHeader,
@@ -16,6 +15,7 @@ import InvestmentAmountInput from './InvestmentAmountInput';
 import TargetPortfolio from './TargetPortfolio';
 import CurrentPortfolio from './CurrentPortfolio';
 import { sendVKParamsToBackend, getVKUserId, isVKApp, saveUserPortfolio, loadUserPortfolio } from '../utils/vkUtils';
+import API from '../services/api';
 
 const StockMenu = ({ id }) => {
   const [stocks, setStocks] = useState([]);
@@ -152,12 +152,12 @@ const StockMenu = ({ id }) => {
         setError(null);
 
         console.log('Начинаем загрузку данных...');
-        const response = await axios.get('http://127.0.0.1:8000/stocks');
-        console.log('Данные получены:', response.data);
+        const stocksData = await API.getStocks();
+        console.log('Данные получены:', stocksData);
 
-        if (response.data && response.data.length > 0) {
+        if (stocksData && stocksData.length > 0) {
           // Преобразуем массив массивов в массив объектов
-          const stocksData = response.data.map(stockArray => ({
+          const stocksArray = stocksData.map(stockArray => ({
             ticker: stockArray[0],
             name: stockArray[1],
             price: stockArray[2],
@@ -165,7 +165,7 @@ const StockMenu = ({ id }) => {
           }));
 
           // Сортируем по капитализации
-          const sortedStocks = sortStocksByCapitalization(stocksData);
+          const sortedStocks = sortStocksByCapitalization(stocksArray);
           console.log('Обработанные и отсортированные акции:', sortedStocks);
 
           setStocks(sortedStocks);
@@ -196,6 +196,7 @@ const StockMenu = ({ id }) => {
     };
 
     fetchStocks();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   // Отправка VK параметров на бэкенд при загрузке компонента
   useEffect(() => {
@@ -469,13 +470,8 @@ const StockMenu = ({ id }) => {
       // Получаем дивиденды для каждой акции в целевом портфеле
       for (const result of portfolioResults.stocks) {
         if (result.sharesToBuy > 0) {
-          try {
-            const response = await axios.get(`http://127.0.0.1:8000/stocks/dividends/${result.ticker}`);
-            const dividendPerShare = response.data || 0;
-            totalTargetDividends += dividendPerShare * result.sharesToBuy;
-          } catch (error) {
-            console.warn(`Не удалось получить дивиденды для ${result.ticker}:`, error);
-          }
+          const dividendPerShare = await API.getDividends(result.ticker);
+          totalTargetDividends += dividendPerShare * result.sharesToBuy;
         }
       }
 
@@ -502,14 +498,8 @@ const StockMenu = ({ id }) => {
       // Получаем дивиденды для каждой акции в текущих позициях
       for (const [ticker, amount] of Object.entries(currentHoldings)) {
         if (amount > 0) {
-          try {
-            const response = await axios.get(`http://127.0.0.1:8000/stocks/dividends/${ticker}`);
-            const dividendPerShare = response.data || 0;
-            totalDividendsAmount += dividendPerShare * amount;
-          } catch (error) {
-            console.warn(`Не удалось получить дивиденды для ${ticker}:`, error);
-            // Продолжаем расчет для других акций
-          }
+          const dividendPerShare = await API.getDividends(ticker);
+          totalDividendsAmount += dividendPerShare * amount;
         }
       }
 
@@ -525,11 +515,13 @@ const StockMenu = ({ id }) => {
   // Пересчитываем дивиденды при изменении текущих позиций
   useEffect(() => {
     calculateTotalDividends();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentHoldings]);
 
   // Пересчитываем целевые дивиденды при изменении результатов портфеля
   useEffect(() => {
     calculateTargetDividends();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [portfolioResults]);
 
   // Автосохранение портфеля при изменении данных
@@ -542,6 +534,7 @@ const StockMenu = ({ id }) => {
 
       return () => clearTimeout(timeoutId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [investmentAmount, currentHoldings, selectedStocks, vkUserInfo, isDataLoaded]);
 
   if (loading) {
