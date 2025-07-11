@@ -542,7 +542,7 @@ const StockMenu = ({ id }) => {
       <Panel id={id}>
         <PanelHeader>Акции</PanelHeader>
         <Group>
-          <div style={{ textAlign: 'center', padding: '40px 0' }}>
+          <div className="loading-container">
             <p>Загрузка данных...</p>
           </div>
         </Group>
@@ -555,7 +555,7 @@ const StockMenu = ({ id }) => {
       <Panel id={id}>
         <PanelHeader>Акции</PanelHeader>
         <Group>
-          <div style={{ padding: '20px', textAlign: 'center' }}>
+          <div className="empty-state">
             <p>Ошибка: {error}</p>
           </div>
         </Group>
@@ -567,9 +567,9 @@ const StockMenu = ({ id }) => {
     <Panel id={id}>
       <PanelHeader>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-          <div>
+          <div className="vk-text-primary">
             Балансировка портфеля
-            <span style={{ fontSize: '14px', color: '#818C99', marginLeft: '8px' }}>
+            <span className="currency-text">
               (Шаг {currentStep} из 3)
             </span>
           </div>
@@ -649,15 +649,11 @@ const StockMenu = ({ id }) => {
       {/* Шаг 3: Результаты */}
       {currentStep === 3 && portfolioResults && (
         <>
-          <Group style={{ display: 'flex', justifyContent: 'center' }}>
-            <div style={{
+          <Group className="portfolio-summary">
+            <div className="portfolio-summary-card" style={{
               backgroundColor: '#FFF3CD',
               border: '1px solid #FFEAA7',
-              borderRadius: '8px',
-              padding: '12px',
-              fontSize: '14px',
               color: '#856404',
-              maxWidth: '600px', // ограничим ширину, чтобы блок не растягивался
               textAlign: 'center'
             }}>
               ⚠️ Результаты расчёта программы не являются индивидуальной инвестиционной рекомендацией. Все инвестиционные решения принимаются на ваш страх и риск.

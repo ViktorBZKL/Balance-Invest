@@ -3,6 +3,7 @@ import { AppRoot, ConfigProvider } from '@vkontakte/vkui';
 import StockMenu from './components/StockMenu';
 import VKTestComponent from './components/VKTestComponent';
 import '@vkontakte/vkui/dist/vkui.css';
+import './styles/theme.css';
 
 export default function App() {
   // Показываем тестовый компонент VK, если в URL есть параметр ?test=vk

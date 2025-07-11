@@ -19,17 +19,16 @@ const StockList = ({
       <Header mode="secondary" style={{ marginTop: '16px' }}>
         Список акций ({stocks.length})
         {searchValue && (
-          <span style={{ fontSize: '12px', color: '#818C99', marginLeft: '8px' }}>
+          <span className="currency-text">
             найдено
           </span>
         )}
       </Header>
-      <div style={{
+      <div className="vk-card" style={{
         border: '1px solid #e0e0e0',
         borderRadius: '8px',
         maxHeight: '200px',
-        overflowY: 'auto',
-        backgroundColor: '#fff'
+        overflowY: 'auto'
       }}>
         {stocks.length > 0 ? (
           stocks.map((stock) => {
@@ -51,14 +50,14 @@ const StockList = ({
                   onChange={() => onStockToggle(stock)}
                   style={{ marginRight: '12px' }}
                 />
-                <span>
+                <span className="vk-text-primary">
                   <strong>{stock.name}</strong>: {stock.ticker}
                 </span>
               </div>
             );
           })
         ) : (
-          <div style={{ padding: '16px', textAlign: 'center', color: '#818C99' }}>
+          <div className="empty-state">
             Ничего не найдено
           </div>
         )}

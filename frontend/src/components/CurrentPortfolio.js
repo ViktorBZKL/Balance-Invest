@@ -29,20 +29,20 @@ const CurrentPortfolio = ({
           <SimpleCell
             key={stock.ticker}
             before={
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span style={{ fontWeight: 'bold', color: '#000000' }}>{stock.name}</span>
-                <div style={{ fontSize: '12px', color: '#818C99' }}>
+              <div className="portfolio-container">
+                <span className="stock-name">{stock.name}</span>
+                <div className="stock-details">
                   <div>{stock.ticker} • {formatPrice(stock.price)}</div>
                   {difference > 0 ? (
-                    <div style={{ color: '#4CAF50', fontWeight: 'bold' }}>
+                    <div className="profit-text">
                       Купить еще: {difference} шт.
                     </div>
                   ) : difference < 0 ? (
-                    <div style={{ color: '#2196F3', fontWeight: 'bold' }}>
+                    <div className="price-text">
                       Целевое распределение достигнуто
                     </div>
                   ) : currentAmount > 0 ? (
-                    <div style={{ color: '#2196F3', fontWeight: 'bold' }}>
+                    <div className="price-text">
                       Целевое распределение достигнуто
                     </div>
                   ) : null}
@@ -70,14 +70,14 @@ const CurrentPortfolio = ({
         <SimpleCell
           before={
             <div>
-              <div style={{ fontWeight: 'bold', color: '#000000' }}>Стоимость позиций</div>
-              <div style={{ fontSize: '12px', color: '#818C99' }}>
+              <div className="stock-name">Стоимость позиций</div>
+              <div className="stock-details">
                 Текущий портфель
               </div>
             </div>
           }
           after={
-            <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#000000' }}>
+            <div className="total-value">
               {formatPrice(
                 selectedStocks.reduce((total, stock) => {
                   const amount = currentHoldings[stock.ticker] || 0;
@@ -94,10 +94,10 @@ const CurrentPortfolio = ({
         <SimpleCell
           before={
             <div>
-              <div style={{ fontWeight: 'bold', color: '#000000' }}>
+              <div className="stock-name">
                 {dividendsLoading ? 'Расчет дивидендов...' : 'Годовые дивиденды'}
               </div>
-              <div style={{ fontSize: '12px', color: '#818C99' }}>
+              <div className="stock-details">
                 {dividendsLoading ? 'Ожидаемая выплата' : (() => {
                   const currentPortfolioValue = selectedStocks.reduce((total, stock) => {
                     const amount = currentHoldings[stock.ticker] || 0;
@@ -111,7 +111,7 @@ const CurrentPortfolio = ({
             </div>
           }
           after={
-            <div style={{ fontWeight: 'bold', fontSize: '16px', color: '#000000' }}>
+            <div className="total-value">
               {dividendsLoading ? '...' : formatPrice(totalDividends)}
             </div>
           }

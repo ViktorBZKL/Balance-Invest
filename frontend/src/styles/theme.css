@@ -1,0 +1,154 @@
+/* Стили для поддержки темной темы VK */
+
+/* Основные цвета текста - используем CSS переменные VK */
+.vk-text-primary {
+  color: var(--vkui--color_text_primary, #000000);
+}
+
+.vk-text-secondary {
+  color: var(--vkui--color_text_secondary, #818C99);
+}
+
+.vk-text-tertiary {
+  color: var(--vkui--color_text_tertiary, #99A2AD);
+}
+
+.vk-text-accent {
+  color: var(--vkui--color_text_accent, #3F8AE0);
+}
+
+.vk-text-positive {
+  color: var(--vkui--color_text_positive, #4BB34B);
+}
+
+/* Фоновые цвета */
+.vk-background-content {
+  background-color: var(--vkui--color_background_content, #FFFFFF);
+}
+
+.vk-background-secondary {
+  background-color: var(--vkui--color_background_secondary, #F5F5F7);
+}
+
+/* Цвета для карточек */
+.vk-card {
+  background-color: var(--vkui--color_background_content, #FFFFFF);
+  color: var(--vkui--color_text_primary, #000000);
+}
+
+/* Специальные стили для финансовых данных */
+.profit-text {
+  color: var(--vkui--color_text_positive, #4BB34B);
+  font-weight: bold;
+}
+
+.price-text {
+  color: var(--vkui--color_text_accent, #3F8AE0);
+  font-weight: bold;
+}
+
+/* Стили для загрузки */
+.loading-container {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--vkui--color_text_secondary, #818C99);
+}
+
+/* Стили для пустого состояния */
+.empty-state {
+  padding: 16px;
+  text-align: center;
+  color: var(--vkui--color_text_secondary, #818C99);
+}
+
+/* Контейнер для портфолио */
+.portfolio-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.portfolio-summary {
+  display: flex;
+  justify-content: center;
+}
+
+.portfolio-summary-card {
+  background-color: var(--vkui--color_background_content, #FFFFFF);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  font-size: 14px;
+}
+
+/* Стили для текста с финансовыми данными */
+.stock-name {
+  font-weight: bold;
+  color: var(--vkui--color_text_primary, #000000);
+}
+
+.stock-details {
+  font-size: 12px;
+  color: var(--vkui--color_text_secondary, #818C99);
+}
+
+.currency-text {
+  font-size: 14px;
+  color: var(--vkui--color_text_secondary, #818C99);
+  margin-left: 8px;
+}
+
+.total-value {
+  font-weight: bold;
+  font-size: 16px;
+  color: var(--vkui--color_text_primary, #000000);
+}
+
+/* Переопределение цветов для темной темы VK */
+/* VK автоматически устанавливает CSS переменные при смене темы */
+
+/* Дополнительные стили для улучшения читаемости */
+.vkui__SimpleCell__content {
+  color: var(--vkui--color_text_primary) !important;
+}
+
+.vkui__Header {
+  color: var(--vkui--color_text_primary) !important;
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+  .portfolio-summary-card {
+    margin: 0 16px;
+  }
+}
+
+/* Принудительные стили для темной темы (если CSS переменные не работают) */
+@media (prefers-color-scheme: dark) {
+  .vk-text-primary {
+    color: #FFFFFF !important;
+  }
+
+  .vk-text-secondary {
+    color: #76787A !important;
+  }
+
+  .stock-name {
+    color: #FFFFFF !important;
+  }
+
+  .total-value {
+    color: #FFFFFF !important;
+  }
+
+  .vk-background-content {
+    background-color: #232324 !important;
+  }
+
+  .vk-card {
+    background-color: #232324 !important;
+    color: #FFFFFF !important;
+  }
+}
