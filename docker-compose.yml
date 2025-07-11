@@ -35,23 +35,8 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - certbot-www:/var/www/certbot
     depends_on:
       - backend
 
-  certbot:
-    image: certbot/certbot
-    container_name: vk_certbot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/lib/letsencrypt
-      - certbot-www:/var/www/certbot
-    entrypoint: /bin/sh -c "trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --quiet --deploy-hook 'nginx -s reload'; done"
-
 volumes:
   db-data:
-  certbot-etc:
-  certbot-var:
-  certbot-www:
