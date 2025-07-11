@@ -42,7 +42,6 @@ const StockMenu = ({ id }) => {
     try {
       const savedPortfolio = await loadUserPortfolio(vkUserId);
       if (savedPortfolio && savedPortfolio.investment_amount > 0) {
-        console.log('Загружаем сохраненный портфель:', savedPortfolio);
 
         // Устанавливаем сумму инвестиций
         const formattedAmount = formatNumberWithSpaces(savedPortfolio.investment_amount.toString());
@@ -71,7 +70,6 @@ const StockMenu = ({ id }) => {
           // Переходим сразу к шагу 3 (результаты)
           setCurrentStep(3);
 
-          console.log('Портфель загружен успешно, переходим к результатам');
           return true;
         }
       }
@@ -127,7 +125,6 @@ const StockMenu = ({ id }) => {
       totalCapitalization
     });
 
-    console.log('Портфель рассчитан для загруженных данных');
   };
 
   // Функция для сохранения портфеля
@@ -139,7 +136,6 @@ const StockMenu = ({ id }) => {
       }
 
       await saveUserPortfolio(vkUserId, investmentAmount, selectedStocks, currentHoldings);
-      console.log('Портфель автоматически сохранен');
     } catch (error) {
       console.error('Ошибка при сохранении портфеля:', error);
     }
@@ -151,9 +147,7 @@ const StockMenu = ({ id }) => {
         setLoading(true);
         setError(null);
 
-        console.log('Начинаем загрузку данных...');
         const stocksData = await API.getStocks();
-        console.log('Данные получены:', stocksData);
 
         if (stocksData && stocksData.length > 0) {
           // Преобразуем массив массивов в массив объектов
@@ -166,7 +160,6 @@ const StockMenu = ({ id }) => {
 
           // Сортируем по капитализации
           const sortedStocks = sortStocksByCapitalization(stocksArray);
-          console.log('Обработанные и отсортированные акции:', sortedStocks);
 
           setStocks(sortedStocks);
           setFilteredStocks(sortedStocks);
@@ -176,7 +169,7 @@ const StockMenu = ({ id }) => {
           if (vkUserId && isVKApp()) {
             const portfolioLoaded = await loadSavedPortfolio(vkUserId, sortedStocks);
             if (portfolioLoaded) {
-              console.log('Портфель загружен, остаемся на шаге 3');
+              // Портфель загружен, остаемся на шаге 3
             }
           }
 
@@ -203,12 +196,10 @@ const StockMenu = ({ id }) => {
     const sendVKParams = async () => {
       try {
         if (isVKApp()) {
-          console.log('Приложение запущено в VK, отправляем параметры на бэкенд...');
           const vkData = await sendVKParamsToBackend();
           setVkUserInfo(vkData);
-          console.log('VK пользователь:', vkData);
         } else {
-          console.log('Приложение запущено вне VK');
+          // Приложение запущено вне VK
         }
       } catch (error) {
         console.error('Ошибка при отправке VK параметров:', error);
@@ -332,7 +323,6 @@ const StockMenu = ({ id }) => {
   const clearUserPortfolio = async (vkUserId) => {
     try {
       await saveUserPortfolio(vkUserId, 0, [], {});
-      console.log('Портфель очищен в базе данных');
     } catch (error) {
       console.error('Ошибка при очистке портфеля:', error);
     }

@@ -46,8 +46,6 @@ async def get_vk_user_info(request: Request):
     if not vk_user_id:
         return {"error": "vk_user_id not found in query parameters"}
 
-    print(f"Получен запрос для пользователя VK с ID: {vk_user_id}")
-
     return vk_user_id
 
 

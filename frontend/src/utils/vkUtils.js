@@ -30,11 +30,8 @@ export const sendVKParamsToBackend = async () => {
       return null;
     }
 
-    console.log('Отправляем VK параметры на бэкенд:', vkParams);
-
     const response = await API.validateVKParams(vkParams);
 
-    console.log('Ответ от бэкенда:', response);
     return response;
 
   } catch (error) {
@@ -79,11 +76,8 @@ export const saveUserPortfolio = async (vkUserId, investmentAmount, selectedStoc
       stocks: stocks
     };
 
-    console.log('Сохраняем портфель:', portfolioData);
-
     const response = await API.savePortfolio(portfolioData);
 
-    console.log('Портфель сохранен:', response);
     return response;
 
   } catch (error) {
@@ -97,15 +91,11 @@ export const saveUserPortfolio = async (vkUserId, investmentAmount, selectedStoc
  */
 export const loadUserPortfolio = async (vkUserId) => {
   try {
-    console.log('Загружаем портфель для пользователя:', vkUserId);
-
     const response = await API.getPortfolio(vkUserId);
 
     if (response) {
-      console.log('Портфель загружен:', response);
       return response;
     } else {
-      console.log('Портфель пользователя не найден');
       return null;
     }
 

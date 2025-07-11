@@ -39,11 +39,11 @@ const CurrentPortfolio = ({
                     </div>
                   ) : difference < 0 ? (
                     <div className="price-text">
-                      Целевое распределение достигнуто
+                      Цель достигнута
                     </div>
                   ) : currentAmount > 0 ? (
                     <div className="price-text">
-                      Целевое распределение достигнуто
+                      Цель достигнута
                     </div>
                   ) : null}
                 </div>
