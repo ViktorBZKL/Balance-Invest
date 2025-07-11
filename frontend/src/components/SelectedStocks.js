@@ -7,12 +7,11 @@ const SelectedStocks = ({ selectedStocks, onStockRemove, onNext }) => {
   return (
     <>
       <Header mode="secondary">Выбранные акции ({selectedStocks.length})</Header>
-      <div style={{
+      <div className="vk-card" style={{
         maxHeight: '150px',
         overflowY: 'auto',
         border: '1px solid #e0e0e0',
-        borderRadius: '8px',
-        backgroundColor: '#fff'
+        borderRadius: '8px'
       }}>
         {selectedStocks.map(stock => (
           <SimpleCell
@@ -20,7 +19,9 @@ const SelectedStocks = ({ selectedStocks, onStockRemove, onNext }) => {
             removable
             onRemove={() => onStockRemove(stock)}
           >
-            <strong>{stock.name}</strong>: {stock.ticker}
+            <span className="vk-text-primary">
+              <strong>{stock.name}</strong>: {stock.ticker}
+            </span>
           </SimpleCell>
         ))}
       </div>

@@ -118,6 +118,25 @@
   color: var(--vkui--color_text_primary) !important;
 }
 
+.vkui__SimpleCell {
+  background-color: var(--vkui--color_background_content) !important;
+  border-color: var(--vkui--color_separator_primary) !important;
+}
+
+.vkui__Group {
+  background-color: var(--vkui--color_background_content) !important;
+}
+
+/* Стили для выбранных акций */
+.vk-card .vkui__SimpleCell {
+  background-color: var(--vkui--color_background_content) !important;
+  color: var(--vkui--color_text_primary) !important;
+}
+
+.vk-card .vkui__SimpleCell__content {
+  color: var(--vkui--color_text_primary) !important;
+}
+
 /* Адаптивные стили для мобильных устройств */
 @media (max-width: 768px) {
   .portfolio-summary-card {
@@ -151,4 +170,59 @@
     background-color: #232324 !important;
     color: #FFFFFF !important;
   }
+
+  /* Принудительные стили для VKUI компонентов в темной теме */
+  .vkui__SimpleCell {
+    background-color: #232324 !important;
+    color: #FFFFFF !important;
+  }
+
+  .vkui__SimpleCell__content {
+    color: #FFFFFF !important;
+  }
+
+  .vkui__Group {
+    background-color: #232324 !important;
+  }
+
+  .vkui__Header {
+    color: #FFFFFF !important;
+  }
+
+  .vkui__PanelHeader {
+    background-color: #232324 !important;
+    color: #FFFFFF !important;
+  }
+
+  .vkui__Panel {
+    background-color: #19191A !important;
+  }
+}
+
+/* Принудительные стили для VK темной темы (не зависит от prefers-color-scheme) */
+[data-scheme="space_gray"] .vk-text-primary,
+[data-scheme="space_gray"] .stock-name,
+[data-scheme="space_gray"] .total-value {
+  color: #FFFFFF !important;
+}
+
+[data-scheme="space_gray"] .vk-text-secondary,
+[data-scheme="space_gray"] .stock-details,
+[data-scheme="space_gray"] .currency-text {
+  color: #76787A !important;
+}
+
+[data-scheme="space_gray"] .vk-card,
+[data-scheme="space_gray"] .vkui__SimpleCell,
+[data-scheme="space_gray"] .vkui__Group {
+  background-color: #232324 !important;
+  color: #FFFFFF !important;
+}
+
+[data-scheme="space_gray"] .vkui__SimpleCell__content {
+  color: #FFFFFF !important;
+}
+
+[data-scheme="space_gray"] .vkui__Panel {
+  background-color: #19191A !important;
 }

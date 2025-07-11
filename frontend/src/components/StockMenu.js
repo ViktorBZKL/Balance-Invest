@@ -619,7 +619,9 @@ const StockMenu = ({ id }) => {
             <Header mode="secondary">Выбранные акции ({selectedStocks.length})</Header>
             {selectedStocks.map(stock => (
               <SimpleCell key={stock.ticker}>
-                <strong>{stock.name}</strong>: {stock.ticker}
+                <span className="vk-text-primary">
+                  <strong>{stock.name}</strong>: {stock.ticker}
+                </span>
               </SimpleCell>
             ))}
           </Group>
