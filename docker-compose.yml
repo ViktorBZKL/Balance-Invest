@@ -18,9 +18,7 @@ services:
       context: ./backend
     container_name: vk_mini_app_backend
     environment:
-      POSTGRES_DSN: ${POSTGRES_DSN}
-    depends_on:
-      - service-db
+      POSTGRES_DSN: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@service-db:5432/${POSTGRES_DB}
     ports:
       - "8000:8000"
     volumes:
