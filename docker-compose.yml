@@ -18,7 +18,7 @@ services:
       context: ./backend
     container_name: vk_mini_app_backend
     environment:
-      DATABASE: ${POSTGRES_DSN}
+      POSTGRES_DSN: ${POSTGRES_DSN}
     depends_on:
       - service-db
     ports:
