@@ -6,7 +6,7 @@ ROOT_DIR = Path(__file__).parent.parent.parent
 ENV_FILE_PATH = ROOT_DIR / ".env"
 
 class Settings(BaseSettings):
-    DATABASE: str
+    POSTGRES_DSN: str
 
     model_config = SettingsConfigDict(
         env_file=str(ENV_FILE_PATH)

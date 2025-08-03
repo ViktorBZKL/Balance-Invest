@@ -36,9 +36,6 @@ async def get_dividends(ticker: str):
 
 @vk_router.get("/user")
 async def get_vk_user_info(request: Request):
-    """
-    Получение информации о пользователе VK из query параметров
-    """
     query_params = dict(request.query_params)
 
     vk_user_id = query_params.get("vk_user_id")
@@ -51,10 +48,6 @@ async def get_vk_user_info(request: Request):
 
 @portfolio_router.post("/save", response_model=SaveResponse)
 async def save_portfolio(portfolio: PortfolioSave, db: Session = Depends(get_db)):
-    """
-    Сохранение портфеля пользователя (сумма инвестиций + выбранные акции)
-    """
-    # Преобразуем данные акций в нужный формат
     stocks_data = []
     for stock in portfolio.stocks:
         stocks_data.append({
@@ -67,12 +60,8 @@ async def save_portfolio(portfolio: PortfolioSave, db: Session = Depends(get_db)
 
 @portfolio_router.get("/{vk_user_id}", response_model=PortfolioResponse)
 async def get_portfolio(vk_user_id: int, db: Session = Depends(get_db)):
-    """
-    Получение сохраненного портфеля пользователя
-    """
     portfolio_data = get_user_portfolio(db, vk_user_id)
 
-    # Преобразуем в нужный формат
     stocks = []
     for stock_data in portfolio_data["stocks"]:
         stocks.append({

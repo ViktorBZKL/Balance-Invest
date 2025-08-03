@@ -23,7 +23,7 @@ const CurrentPortfolio = ({
         const targetResult = portfolioResults.stocks.find(r => r.ticker === stock.ticker);
         const targetAmount = targetResult ? targetResult.sharesToBuy : 0;
         const difference = targetAmount - currentAmount;
-        const maxShares = stock.volume; // ISSUESIZE
+        const maxShares = stock.volume;
 
         return (
           <SimpleCell
@@ -65,7 +65,6 @@ const CurrentPortfolio = ({
         );
       })}
 
-      {/* Итоговая стоимость текущих позиций */}
       {Object.keys(currentHoldings).length > 0 && (
         <SimpleCell
           before={
@@ -89,7 +88,6 @@ const CurrentPortfolio = ({
         />
       )}
 
-      {/* Сумма дивидендов */}
       {Object.keys(currentHoldings).length > 0 && (
         <SimpleCell
           before={

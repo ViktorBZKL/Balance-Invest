@@ -1,6 +1,3 @@
-/* Стили для поддержки темной темы VK */
-
-/* Основные цвета текста - используем CSS переменные VK */
 .vk-text-primary {
   color: var(--vkui--color_text_primary, #000000);
 }
@@ -21,7 +18,6 @@
   color: var(--vkui--color_text_positive, #4BB34B);
 }
 
-/* Фоновые цвета */
 .vk-background-content {
   background-color: var(--vkui--color_background_content, #FFFFFF);
 }
@@ -30,13 +26,11 @@
   background-color: var(--vkui--color_background_secondary, #F5F5F7);
 }
 
-/* Цвета для карточек */
 .vk-card {
   background-color: var(--vkui--color_background_content, #FFFFFF);
   color: var(--vkui--color_text_primary, #000000);
 }
 
-/* Специальные стили для финансовых данных */
 .profit-text {
   color: var(--vkui--color_text_positive, #4BB34B);
   font-weight: bold;
@@ -47,21 +41,18 @@
   font-weight: bold;
 }
 
-/* Стили для загрузки */
 .loading-container {
   text-align: center;
   padding: 40px 0;
   color: var(--vkui--color_text_secondary, #818C99);
 }
 
-/* Стили для пустого состояния */
 .empty-state {
   padding: 16px;
   text-align: center;
   color: var(--vkui--color_text_secondary, #818C99);
 }
 
-/* Контейнер для портфолио */
 .portfolio-container {
   display: flex;
   flex-direction: column;
@@ -83,7 +74,6 @@
   font-size: 14px;
 }
 
-/* Стили для текста с финансовыми данными */
 .stock-name {
   font-weight: bold;
   color: var(--vkui--color_text_primary, #000000);
@@ -106,10 +96,6 @@
   color: var(--vkui--color_text_primary, #000000);
 }
 
-/* Переопределение цветов для темной темы VK */
-/* VK автоматически устанавливает CSS переменные при смене темы */
-
-/* Дополнительные стили для улучшения читаемости */
 .vkui__SimpleCell__content {
   color: var(--vkui--color_text_primary) !important;
 }
@@ -127,7 +113,6 @@
   background-color: var(--vkui--color_background_content) !important;
 }
 
-/* Стили для выбранных акций */
 .vk-card .vkui__SimpleCell {
   background-color: var(--vkui--color_background_content) !important;
   color: var(--vkui--color_text_primary) !important;
@@ -137,14 +122,12 @@
   color: var(--vkui--color_text_primary) !important;
 }
 
-/* Адаптивные стили для мобильных устройств */
 @media (max-width: 768px) {
   .portfolio-summary-card {
     margin: 0 16px;
   }
 }
 
-/* Принудительные стили для темной темы (если CSS переменные не работают) */
 @media (prefers-color-scheme: dark) {
   .vk-text-primary {
     color: #FFFFFF !important;
@@ -171,7 +154,6 @@
     color: #FFFFFF !important;
   }
 
-  /* Принудительные стили для VKUI компонентов в темной теме */
   .vkui__SimpleCell {
     background-color: #232324 !important;
     color: #FFFFFF !important;
@@ -199,7 +181,6 @@
   }
 }
 
-/* Принудительные стили для VK темной темы (не зависит от prefers-color-scheme) */
 [data-scheme="space_gray"] .vk-text-primary,
 [data-scheme="space_gray"] .stock-name,
 [data-scheme="space_gray"] .total-value {

@@ -26,48 +26,41 @@ const StockMenu = ({ id }) => {
   const [selectedStocks, setSelectedStocks] = useState([]);
   const [investmentAmount, setInvestmentAmount] = useState('');
   const [portfolioResults, setPortfolioResults] = useState(null);
-  const [currentStep, setCurrentStep] = useState(1); // 1: выбор акций, 2: ввод суммы, 3: результаты
-  const [activeTab, setActiveTab] = useState('target'); // 'target' или 'current'
-  const [currentHoldings, setCurrentHoldings] = useState({}); // {ticker: количество}
-  const [holdingIntervals, setHoldingIntervals] = useState({}); // для зажатия кнопок
-  const [editingStock, setEditingStock] = useState(null); // редактируемая акция
-  const [totalDividends, setTotalDividends] = useState(0); // общая сумма дивидендов
-  const [dividendsLoading, setDividendsLoading] = useState(false); // загрузка дивидендов
-  const [targetDividends, setTargetDividends] = useState(0); // дивиденды для целевого портфеля
-  const [targetDividendsLoading, setTargetDividendsLoading] = useState(false); // загрузка дивидендов для целевого портфеля
-  const [vkUserInfo, setVkUserInfo] = useState(null); // информация о VK пользователе
-  const [isDataLoaded, setIsDataLoaded] = useState(false); // флаг завершения загрузки данных
-  // Функция для загрузки сохраненного портфеля
+  const [currentStep, setCurrentStep] = useState(1);
+  const [activeTab, setActiveTab] = useState('target');
+  const [currentHoldings, setCurrentHoldings] = useState({});
+  const [holdingIntervals, setHoldingIntervals] = useState({});
+  const [editingStock, setEditingStock] = useState(null);
+  const [totalDividends, setTotalDividends] = useState(0);
+  const [dividendsLoading, setDividendsLoading] = useState(false);
+  const [targetDividends, setTargetDividends] = useState(0);
+  const [targetDividendsLoading, setTargetDividendsLoading] = useState(false);
+  const [vkUserInfo, setVkUserInfo] = useState(null);
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
   const loadSavedPortfolio = async (vkUserId, stocksArray = null) => {
     try {
       const savedPortfolio = await loadUserPortfolio(vkUserId);
       if (savedPortfolio && savedPortfolio.investment_amount > 0) {
-
-        // Устанавливаем сумму инвестиций
         const formattedAmount = formatNumberWithSpaces(savedPortfolio.investment_amount.toString());
         setInvestmentAmount(formattedAmount);
 
-        // Нужно сначала найти соответствующие акции из списка всех акций
         const savedTickers = savedPortfolio.stocks.map(stock => stock.ticker);
 
-        // Используем переданный массив акций или текущее состояние
         const availableStocks = stocksArray || stocks;
 
         if (availableStocks.length > 0) {
           const savedStocks = availableStocks.filter(stock => savedTickers.includes(stock.ticker));
           setSelectedStocks(savedStocks);
 
-          // Устанавливаем текущие позиции
           const holdings = {};
           savedPortfolio.stocks.forEach(stock => {
             holdings[stock.ticker] = stock.quantity;
           });
           setCurrentHoldings(holdings);
 
-          // Рассчитываем портфель автоматически
           calculatePortfolioForSavedData(savedStocks, savedPortfolio.investment_amount);
 
-          // Переходим сразу к шагу 3 (результаты)
           setCurrentStep(3);
 
           return true;
@@ -79,7 +72,6 @@ const StockMenu = ({ id }) => {
     return false;
   };
 
-  // Функция для расчета портфеля для сохраненных данных
   const calculatePortfolioForSavedData = (savedStocks, investmentAmount) => {
     if (savedStocks.length === 0 || !investmentAmount || investmentAmount <= 0) {
       return;
@@ -87,20 +79,17 @@ const StockMenu = ({ id }) => {
 
     const amount = parseFloat(investmentAmount);
 
-    // Считаем общую капитализацию выбранных акций
     const totalCapitalization = savedStocks.reduce((sum, stock) => {
       return sum + (stock.price * stock.volume);
     }, 0);
 
-    // Рассчитываем пропорции и количество акций для покупки
     const results = savedStocks.map(stock => {
       const stockCapitalization = stock.price * stock.volume;
       const proportion = stockCapitalization / totalCapitalization;
       const investmentForStock = amount * proportion;
       const idealSharesToBuy = Math.floor(investmentForStock / stock.price);
 
-      // Ограничиваем количество акций размером эмиссии (ISSUESIZE)
-      const maxAvailableShares = stock.volume; // volume - это ISSUESIZE
+      const maxAvailableShares = stock.volume;
       const sharesToBuy = Math.min(idealSharesToBuy, maxAvailableShares);
       const actualInvestment = sharesToBuy * stock.price;
 
@@ -127,7 +116,6 @@ const StockMenu = ({ id }) => {
 
   };
 
-  // Функция для сохранения портфеля
   const savePortfolio = async () => {
     try {
       const vkUserId = getVKUserId();
@@ -150,7 +138,6 @@ const StockMenu = ({ id }) => {
         const stocksData = await API.getStocks();
 
         if (stocksData && stocksData.length > 0) {
-          // Преобразуем массив массивов в массив объектов
           const stocksArray = stocksData.map(stockArray => ({
             ticker: stockArray[0],
             name: stockArray[1],
@@ -158,22 +145,18 @@ const StockMenu = ({ id }) => {
             volume: stockArray[3]
           }));
 
-          // Сортируем по капитализации
           const sortedStocks = sortStocksByCapitalization(stocksArray);
 
           setStocks(sortedStocks);
           setFilteredStocks(sortedStocks);
 
-          // После загрузки акций пытаемся загрузить сохраненный портфель
           const vkUserId = getVKUserId();
           if (vkUserId && isVKApp()) {
             const portfolioLoaded = await loadSavedPortfolio(vkUserId, sortedStocks);
             if (portfolioLoaded) {
-              // Портфель загружен, остаемся на шаге 3
             }
           }
 
-          // Устанавливаем флаг завершения загрузки
           setIsDataLoaded(true);
         } else {
           setError('Нет данных об акциях');
@@ -189,9 +172,8 @@ const StockMenu = ({ id }) => {
     };
 
     fetchStocks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // Отправка VK параметров на бэкенд при загрузке компонента
+
   useEffect(() => {
     const sendVKParams = async () => {
       try {
@@ -199,7 +181,6 @@ const StockMenu = ({ id }) => {
           const vkData = await sendVKParamsToBackend();
           setVkUserInfo(vkData);
         } else {
-          // Приложение запущено вне VK
         }
       } catch (error) {
         console.error('Ошибка при отправке VK параметров:', error);
@@ -209,7 +190,6 @@ const StockMenu = ({ id }) => {
     sendVKParams();
   }, []);
 
-  // Очистка интервалов при размонтировании компонента
   useEffect(() => {
     return () => {
       Object.values(holdingIntervals).forEach(timeoutId => clearTimeout(timeoutId));
@@ -229,29 +209,23 @@ const StockMenu = ({ id }) => {
     return new Intl.NumberFormat('ru-RU').format(volume);
   };
 
-  // Функция для форматирования числа с пробелами
   const formatNumberWithSpaces = (value) => {
-    // Убираем все пробелы и оставляем только цифры
     const cleanValue = value.replace(/\s/g, '');
-    // Добавляем пробелы каждые 3 цифры
     return cleanValue.replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
   };
 
-  // Функция для получения числового значения из отформатированной строки
   const getNumericValue = (formattedValue) => {
     return formattedValue.replace(/\s/g, '');
   };
 
-  // Функция для сортировки по капитализации (цена × объем) по убыванию
   const sortStocksByCapitalization = (stocksArray) => {
     return [...stocksArray].sort((a, b) => {
       const capA = a.price * a.volume;
       const capB = b.price * b.volume;
-      return capB - capA; // по убыванию
+      return capB - capA;
     });
   };
 
-  // Функция для фильтрации акций по поисковому запросу
   const filterStocks = (stocksArray, searchTerm) => {
     if (!searchTerm.trim()) return stocksArray;
 
@@ -270,7 +244,6 @@ const StockMenu = ({ id }) => {
     setFilteredStocks(filtered);
   };
 
-  // Обработчик выбора/отмены выбора акции
   const handleStockToggle = (stock) => {
     setSelectedStocks(prevSelected => {
       const isAlreadySelected = prevSelected.some(s => s.ticker === stock.ticker);
@@ -282,21 +255,18 @@ const StockMenu = ({ id }) => {
     });
   };
 
-  // Переход к следующему шагу
   const goToNextStep = () => {
     if (currentStep < 3) {
       setCurrentStep(currentStep + 1);
     }
   };
 
-  // Переход к предыдущему шагу
   const goToPreviousStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  // Начать сначала
   const resetProcess = () => {
     setCurrentStep(1);
     setSelectedStocks([]);
@@ -307,19 +277,16 @@ const StockMenu = ({ id }) => {
     setEditingStock(null);
     setTotalDividends(0);
     setTargetDividends(0);
-    setIsDataLoaded(true); // Сбрасываем флаг загрузки
-    // Очищаем все интервалы
+    setIsDataLoaded(true);
     Object.values(holdingIntervals).forEach(timeoutId => clearTimeout(timeoutId));
     setHoldingIntervals({});
 
-    // Очищаем данные в базе данных
     const vkUserId = getVKUserId();
     if (vkUserId && vkUserInfo) {
       clearUserPortfolio(vkUserId);
     }
   };
 
-  // Функция для очистки портфеля в базе данных
   const clearUserPortfolio = async (vkUserId) => {
     try {
       await saveUserPortfolio(vkUserId, 0, [], {});
@@ -328,12 +295,11 @@ const StockMenu = ({ id }) => {
     }
   };
 
-  // Обновление текущих позиций с проверкой лимитов
   const updateCurrentHolding = (ticker, change) => {
     setCurrentHoldings(prev => {
       const currentAmount = prev[ticker] || 0;
       const stock = selectedStocks.find(s => s.ticker === ticker);
-      const maxShares = stock ? stock.volume : Infinity; // volume = ISSUESIZE
+      const maxShares = stock ? stock.volume : Infinity;
 
       const newAmount = Math.max(0, Math.min(maxShares, currentAmount + change));
 
@@ -345,16 +311,15 @@ const StockMenu = ({ id }) => {
     });
   };
 
-  // Функции для зажатия кнопок с ускорением
   const startHolding = (ticker, change) => {
     updateCurrentHolding(ticker, change);
 
     let count = 0;
     const getDelay = () => {
-      if (count < 5) return 200;      // Первые 5 нажатий - медленно
-      if (count < 15) return 100;     // Следующие 10 - быстрее
-      if (count < 30) return 50;      // Еще быстрее
-      return 25;                      // Максимальная скорость
+      if (count < 5) return 200;
+      if (count < 15) return 100;
+      if (count < 30) return 50;
+      return 25;
     };
 
     const acceleratingInterval = () => {
@@ -380,7 +345,6 @@ const StockMenu = ({ id }) => {
     }
   };
 
-  // Прямое изменение количества акций с проверкой лимитов
   const handleDirectInput = (ticker, value) => {
     const numericValue = parseInt(value) || 0;
     const stock = selectedStocks.find(s => s.ticker === ticker);
@@ -396,7 +360,6 @@ const StockMenu = ({ id }) => {
     }
   };
 
-  // Расчет портфеля на основе капитализации
   const calculatePortfolio = () => {
     const numericAmount = getNumericValue(investmentAmount);
     if (selectedStocks.length === 0 || !numericAmount || numericAmount <= 0) {
@@ -405,20 +368,17 @@ const StockMenu = ({ id }) => {
 
     const amount = parseFloat(numericAmount);
 
-    // Считаем общую капитализацию выбранных акций
     const totalCapitalization = selectedStocks.reduce((sum, stock) => {
       return sum + (stock.price * stock.volume);
     }, 0);
 
-    // Рассчитываем пропорции и количество акций для покупки
     const results = selectedStocks.map(stock => {
       const stockCapitalization = stock.price * stock.volume;
       const proportion = stockCapitalization / totalCapitalization;
       const investmentForStock = amount * proportion;
       const idealSharesToBuy = Math.floor(investmentForStock / stock.price);
 
-      // Ограничиваем количество акций размером эмиссии (ISSUESIZE)
-      const maxAvailableShares = stock.volume; // volume - это ISSUESIZE
+      const maxAvailableShares = stock.volume;
       const sharesToBuy = Math.min(idealSharesToBuy, maxAvailableShares);
       const actualInvestment = sharesToBuy * stock.price;
 
@@ -443,10 +403,9 @@ const StockMenu = ({ id }) => {
       totalCapitalization
     });
 
-    setCurrentStep(3); // Переходим к результатам
+    setCurrentStep(3);
   };
 
-  // Функция для расчета дивидендов для целевого портфеля
   const calculateTargetDividends = async () => {
     if (!portfolioResults || portfolioResults.stocks.length === 0) {
       setTargetDividends(0);
@@ -457,7 +416,6 @@ const StockMenu = ({ id }) => {
     try {
       let totalTargetDividends = 0;
 
-      // Получаем дивиденды для каждой акции в целевом портфеле
       for (const result of portfolioResults.stocks) {
         if (result.sharesToBuy > 0) {
           const dividendPerShare = await API.getDividends(result.ticker);
@@ -474,7 +432,6 @@ const StockMenu = ({ id }) => {
     }
   };
 
-  // Функция для расчета дивидендов
   const calculateTotalDividends = async () => {
     if (Object.keys(currentHoldings).length === 0) {
       setTotalDividends(0);
@@ -485,7 +442,6 @@ const StockMenu = ({ id }) => {
     try {
       let totalDividendsAmount = 0;
 
-      // Получаем дивиденды для каждой акции в текущих позициях
       for (const [ticker, amount] of Object.entries(currentHoldings)) {
         if (amount > 0) {
           const dividendPerShare = await API.getDividends(ticker);
@@ -502,29 +458,22 @@ const StockMenu = ({ id }) => {
     }
   };
 
-  // Пересчитываем дивиденды при изменении текущих позиций
   useEffect(() => {
     calculateTotalDividends();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentHoldings]);
 
-  // Пересчитываем целевые дивиденды при изменении результатов портфеля
   useEffect(() => {
     calculateTargetDividends();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [portfolioResults]);
 
-  // Автосохранение портфеля при изменении данных
   useEffect(() => {
-    // Сохраняем только если есть VK пользователь, данные для сохранения и загрузка завершена
     if (vkUserInfo && investmentAmount && selectedStocks.length > 0 && isDataLoaded) {
       const timeoutId = setTimeout(() => {
         savePortfolio();
-      }, 2000); // Сохраняем через 2 секунды после последнего изменения
+      }, 2000);
 
       return () => clearTimeout(timeoutId);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [investmentAmount, currentHoldings, selectedStocks, vkUserInfo, isDataLoaded]);
 
   if (loading) {
@@ -566,7 +515,6 @@ const StockMenu = ({ id }) => {
         </div>
       </PanelHeader>
 
-      {/* Шаг 1: Выбор акций */}
       {currentStep === 1 && (
         <>
           <Group>
@@ -593,7 +541,6 @@ const StockMenu = ({ id }) => {
         </>
       )}
 
-      {/* Шаг 2: Ввод суммы */}
       {currentStep === 2 && (
         <>
           <Group>
@@ -638,7 +585,6 @@ const StockMenu = ({ id }) => {
         </>
       )}
 
-      {/* Шаг 3: Результаты */}
       {currentStep === 3 && portfolioResults && (
         <>
           <Group className="portfolio-summary">
@@ -670,7 +616,6 @@ const StockMenu = ({ id }) => {
             </Tabs>
           </Group>
 
-          {/* Вкладка: Целевое распределение */}
           {activeTab === 'target' && (
             <Group>
               <TargetPortfolio
@@ -682,7 +627,6 @@ const StockMenu = ({ id }) => {
             </Group>
           )}
 
-          {/* Вкладка: Текущее распределение */}
           {activeTab === 'current' && (
             <Group>
               <CurrentPortfolio

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import API_CONFIG from '../config/api';
 
-// Создаем единый API клиент
 const apiClient = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   timeout: API_CONFIG.TIMEOUT,
@@ -10,9 +9,7 @@ const apiClient = axios.create({
   },
 });
 
-// API сервис - все запросы к backend в одном месте
 export const API = {
-  // Получить список всех акций
   getStocks: async () => {
     try {
       const response = await apiClient.get('/stocks');
@@ -22,7 +19,6 @@ export const API = {
     }
   },
 
-  // Получить дивиденды по тикеру
   getDividends: async (ticker) => {
     try {
       const response = await apiClient.get(`/stocks/dividends/${ticker}`);
@@ -33,7 +29,6 @@ export const API = {
     }
   },
 
-  // Валидация VK параметров
   validateVKParams: async (vkParams) => {
     try {
       const queryString = new URLSearchParams(vkParams).toString();
@@ -44,7 +39,6 @@ export const API = {
     }
   },
 
-  // Сохранить портфель пользователя
   savePortfolio: async (portfolioData) => {
     try {
       const response = await apiClient.post('/portfolio/save', portfolioData);
@@ -54,14 +48,13 @@ export const API = {
     }
   },
 
-  // Получить портфель пользователя
   getPortfolio: async (vkUserId) => {
     try {
       const response = await apiClient.get(`/portfolio/${vkUserId}`);
       return response.data;
     } catch (error) {
       if (error.response?.status === 404) {
-        return null; // Портфель не найден
+        return null;
       }
       throw new Error(`Ошибка при загрузке портфеля: ${error.message}`);
     }

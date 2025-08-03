@@ -4,4 +4,7 @@
 venv/
 backend/src/__pycache__/
 
+frontend/.env
 frontend/node_modules/
+frontend/build/
+frontend/build.zip

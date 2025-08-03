@@ -42,7 +42,6 @@ const TargetPortfolio = ({ portfolioResults, formatPrice, targetDividends, targe
         }
       />
 
-      {/* Целевые дивиденды */}
       <SimpleCell
         before={
           <div>

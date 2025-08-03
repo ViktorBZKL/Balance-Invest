@@ -10,7 +10,7 @@ from src.config import settings
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # URL базы данных PostgreSQL
-DATABASE = settings.DATABASE
+DATABASE = settings.POSTGRES_DSN
 
 # Создание движка базы данных
 engine = create_engine(DATABASE)

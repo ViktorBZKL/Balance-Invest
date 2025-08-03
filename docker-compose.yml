@@ -5,9 +5,9 @@ services:
     image: postgres:15
     container_name: vk_mini_app_db
     environment:
-      POSTGRES_DB: vk_mini_app
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5437:5432"
     volumes:
@@ -18,7 +18,7 @@ services:
       context: ./backend
     container_name: vk_mini_app_backend
     environment:
-      DATABASE: postgresql://postgres:admin@service-db:5432/vk_mini_app
+      DATABASE: ${POSTGRES_DSN}
     depends_on:
       - service-db
     ports:
@@ -26,17 +26,5 @@ services:
     volumes:
       - ./backend:/app
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
-
-  nginx:
-    image: nginx:alpine
-    container_name: vk_mini_app_nginx
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-    depends_on:
-      - backend
-
 volumes:
   db-data:

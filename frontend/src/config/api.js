@@ -1,9 +1,5 @@
-// Конфигурация API - единое место для указания адреса backend
 const API_CONFIG = {
-  // Базовый URL для API - измените этот адрес при развертывании
-  BASE_URL: 'https://balance-investment.ru/api',
-
-  // Таймаут для запросов (в миллисекундах)
+  BASE_URL: process.env.REACT_APP_API_BASE_URL,
   TIMEOUT: 30000,
 };
 
